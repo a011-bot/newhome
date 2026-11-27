@@ -3,11 +3,13 @@ import { ChevronDown } from 'lucide-react';
 import {
   ABOUT_TIMELINE,
   CORE_STRENGTHS,
+  INTERVIEW_QA,
   PROBLEM_SOLVING_STEPS,
 } from '../data/portfolioData';
 
 export function AboutSection() {
   const [openTimelineIds, setOpenTimelineIds] = useState<string[]>([ABOUT_TIMELINE[0].id]);
+  const [openQaId, setOpenQaId] = useState<string | null>(INTERVIEW_QA[0].id);
 
   const toggleTimeline = (id: string) => {
     setOpenTimelineIds((prev) =>
@@ -86,75 +88,121 @@ export function AboutSection() {
           </div>
         </div>
 
-        {/* Education & Activity Timeline Accordion */}
-        <div className="mt-10">
-          <h3 className="text-base font-bold text-slate-900 dark:text-white">
-            학력 및 주요 활동 연대기
-          </h3>
+        {/* Education Timeline & Interview Q&A Split */}
+        <div className="mt-10 grid gap-8 lg:grid-cols-12">
+          <div className="lg:col-span-7">
+            <h3 className="text-base font-bold text-slate-900 dark:text-white">
+              학력 및 주요 활동 연대기
+            </h3>
 
-          <div className="mt-4 divide-y divide-slate-200 rounded-xl border border-slate-200 bg-white dark:divide-slate-800 dark:border-slate-800 dark:bg-slate-900">
-            {ABOUT_TIMELINE.map((item) => {
-              const isExpanded = openTimelineIds.includes(item.id);
-              const panelId = `timeline-panel-${item.id}`;
+            <div className="mt-4 divide-y divide-slate-200 rounded-xl border border-slate-200 bg-white dark:divide-slate-800 dark:border-slate-800 dark:bg-slate-900">
+              {ABOUT_TIMELINE.map((item) => {
+                const isExpanded = openTimelineIds.includes(item.id);
+                const panelId = `timeline-panel-${item.id}`;
 
-              return (
-                <div key={item.id} className="p-5 sm:px-6">
-                  <div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-center">
-                    <div>
-                      <div className="flex flex-wrap items-center gap-2 text-xs text-slate-500 dark:text-slate-400">
-                        <span className="font-mono-tabular font-medium text-blue-600 dark:text-blue-400">
-                          {item.period}
-                        </span>
-                        <span aria-hidden="true">·</span>
-                        <span>{item.organization}</span>
+                return (
+                  <div key={item.id} className="p-5 sm:px-6">
+                    <div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-center">
+                      <div>
+                        <div className="flex flex-wrap items-center gap-2 text-xs text-slate-500 dark:text-slate-400">
+                          <span className="font-mono-tabular font-medium text-blue-600 dark:text-blue-400">
+                            {item.period}
+                          </span>
+                          <span aria-hidden="true">·</span>
+                          <span>{item.organization}</span>
+                        </div>
+                        <h4 className="mt-1 text-base font-bold text-slate-900 dark:text-white">
+                          {item.title}
+                        </h4>
                       </div>
-                      <h4 className="mt-1 text-base font-bold text-slate-900 dark:text-white">
-                        {item.title}
-                      </h4>
+
+                      <button
+                        type="button"
+                        onClick={() => toggleTimeline(item.id)}
+                        aria-expanded={isExpanded}
+                        aria-controls={panelId}
+                        className="inline-flex min-h-[40px] items-center gap-1.5 self-start rounded-lg border border-slate-200 bg-slate-50 px-3 py-1.5 text-xs font-medium text-slate-700 transition-colors hover:bg-slate-100 whitespace-nowrap shrink-0 sm:self-center dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700"
+                      >
+                        <span>{isExpanded ? '접기' : '자세히 보기'}</span>
+                        <ChevronDown
+                          className={`h-3.5 w-3.5 transition-transform duration-200 ${
+                            isExpanded ? 'rotate-180' : ''
+                          }`}
+                          aria-hidden="true"
+                        />
+                      </button>
                     </div>
 
+                    <p className="mt-2 text-sm leading-relaxed text-slate-600 dark:text-slate-300">
+                      {item.summary}
+                    </p>
+
+                    {isExpanded && (
+                      <div
+                        id={panelId}
+                        className="mt-3 border-t border-slate-100 pt-3 dark:border-slate-800"
+                      >
+                        <ul className="space-y-1.5 text-sm text-slate-600 dark:text-slate-300">
+                          {item.details.map((detail) => (
+                            <li key={detail} className="flex items-start gap-2">
+                              <span
+                                aria-hidden="true"
+                                className="mt-2 h-1 w-1 shrink-0 rounded-full bg-slate-400 dark:bg-slate-500"
+                              />
+                              <span>{detail}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          <div className="lg:col-span-5">
+            <h3 className="text-base font-bold text-slate-900 dark:text-white">
+              면접 핵심 Q&amp;A · 협업 가치관
+            </h3>
+
+            <div className="mt-4 divide-y divide-slate-200 rounded-xl border border-slate-200 bg-white dark:divide-slate-800 dark:border-slate-800 dark:bg-slate-900">
+              {INTERVIEW_QA.map((qa) => {
+                const isOpen = openQaId === qa.id;
+                const qaPanelId = `qa-panel-${qa.id}`;
+
+                return (
+                  <div key={qa.id} className="p-5">
                     <button
                       type="button"
-                      onClick={() => toggleTimeline(item.id)}
-                      aria-expanded={isExpanded}
-                      aria-controls={panelId}
-                      className="inline-flex min-h-[40px] items-center gap-1.5 self-start rounded-lg border border-slate-200 bg-slate-50 px-3 py-1.5 text-xs font-medium text-slate-700 transition-colors hover:bg-slate-100 whitespace-nowrap shrink-0 sm:self-center dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700"
+                      onClick={() => setOpenQaId(isOpen ? null : qa.id)}
+                      aria-expanded={isOpen}
+                      aria-controls={qaPanelId}
+                      className="flex w-full items-start justify-between gap-3 text-left"
                     >
-                      <span>{isExpanded ? '접기' : '자세히 보기'}</span>
+                      <span className="text-sm font-bold leading-snug text-slate-900 dark:text-white">
+                        {qa.question}
+                      </span>
                       <ChevronDown
-                        className={`h-3.5 w-3.5 transition-transform duration-200 ${
-                          isExpanded ? 'rotate-180' : ''
+                        className={`mt-0.5 h-4 w-4 shrink-0 text-slate-400 transition-transform duration-200 ${
+                          isOpen ? 'rotate-180 text-blue-600 dark:text-blue-400' : ''
                         }`}
                         aria-hidden="true"
                       />
                     </button>
+
+                    {isOpen && (
+                      <p
+                        id={qaPanelId}
+                        className="mt-3 border-t border-slate-100 pt-3 text-sm leading-relaxed text-slate-600 dark:border-slate-800 dark:text-slate-300"
+                      >
+                        {qa.answer}
+                      </p>
+                    )}
                   </div>
-
-                  <p className="mt-2 text-sm leading-relaxed text-slate-600 dark:text-slate-300">
-                    {item.summary}
-                  </p>
-
-                  {isExpanded && (
-                    <div
-                      id={panelId}
-                      className="mt-3 border-t border-slate-100 pt-3 dark:border-slate-800"
-                    >
-                      <ul className="space-y-1.5 text-sm text-slate-600 dark:text-slate-300">
-                        {item.details.map((detail) => (
-                          <li key={detail} className="flex items-start gap-2">
-                            <span
-                              aria-hidden="true"
-                              className="mt-2 h-1 w-1 shrink-0 rounded-full bg-slate-400 dark:bg-slate-500"
-                            />
-                            <span>{detail}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
-                </div>
-              );
-            })}
+                );
+              })}
+            </div>
           </div>
         </div>
       </div>

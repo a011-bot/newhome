@@ -42,3 +42,12 @@
 .headline-balance {
   text-wrap: balance;
 }
+
+@media print {
+  header,
+  footer,
+  .no-print {
+    display: none !important;
+  }
+}
+

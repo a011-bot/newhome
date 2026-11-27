@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import {
   Bookmark,
   Check,
@@ -31,10 +31,12 @@ export function ProjectModal({
   const [slideIndex, setSlideIndex] = useState(0);
   const [linkCopied, setLinkCopied] = useState(false);
   const [brokenSlides, setBrokenSlides] = useState<Record<string, boolean>>({});
+  const scrollBodyRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     setSlideIndex(0);
     setLinkCopied(false);
+    scrollBodyRef.current?.scrollTo({ top: 0 });
   }, [project?.id]);
 
   useEffect(() => {
@@ -154,7 +156,7 @@ export function ProjectModal({
         </div>
 
         {/* Scrollable Modal Body */}
-        <div className="flex-1 overflow-y-auto px-6 py-6">
+        <div ref={scrollBodyRef} className="flex-1 overflow-y-auto px-6 py-6">
           {/* Image Carousel */}
           <div className="overflow-hidden rounded-xl border border-slate-200 bg-slate-100 dark:border-slate-800 dark:bg-slate-950">
             <div className="relative aspect-video">
@@ -244,6 +246,39 @@ export function ProjectModal({
               </p>
             </div>
           </div>
+
+          {/* Quantitative Before -> After Comparison */}
+          {project.metricsComparison.length > 0 && (
+            <div className="mt-6">
+              <h3 className="text-xs font-bold tracking-wider text-slate-500 dark:text-slate-400">
+                개선 전후 핵심 지표 비교 (Before → After)
+              </h3>
+              <div className="mt-2.5 grid gap-3 sm:grid-cols-3">
+                {project.metricsComparison.map((metric) => (
+                  <div
+                    key={metric.label}
+                    className="rounded-xl border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-950/40"
+                  >
+                    <p className="text-xs font-medium text-slate-500 dark:text-slate-400">
+                      {metric.label}
+                    </p>
+                    <div className="font-mono-tabular mt-2 flex items-baseline gap-2 text-sm">
+                      <span className="text-slate-400 line-through dark:text-slate-500">
+                        {metric.before}
+                      </span>
+                      <span aria-hidden="true" className="text-slate-400">→</span>
+                      <span className="text-base font-bold text-slate-900 dark:text-white">
+                        {metric.after}
+                      </span>
+                    </div>
+                    <p className="font-mono-tabular mt-1 text-xs font-semibold text-blue-600 dark:text-blue-400">
+                      {metric.delta}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
 
           {/* STAR Problem-Solving Breakdown */}
           <div className="mt-8 space-y-6">

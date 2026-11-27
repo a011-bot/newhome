@@ -7,6 +7,7 @@ interface HeroSectionProps {
   onToggleTheme: () => void;
   onExploreProjects: () => void;
   onDownloadResume: () => void;
+  onOpenResumePreview: () => void;
 }
 
 export function HeroSection({
@@ -14,6 +15,7 @@ export function HeroSection({
   onToggleTheme,
   onExploreProjects,
   onDownloadResume,
+  onOpenResumePreview,
 }: HeroSectionProps) {
   const kpiStripRef = useRef<HTMLDivElement | null>(null);
   const [hasAnimated, setHasAnimated] = useState(false);
@@ -126,11 +128,19 @@ export function HeroSection({
 
               <button
                 type="button"
-                onClick={onDownloadResume}
+                onClick={onOpenResumePreview}
                 className="inline-flex min-h-[44px] items-center gap-2 rounded-lg border border-slate-300 bg-white px-5 py-3 text-sm font-semibold text-slate-800 transition-colors hover:bg-slate-50 whitespace-nowrap shrink-0 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:hover:bg-slate-800"
               >
-                <FileDown className="h-4 w-4 text-slate-600 dark:text-slate-300" aria-hidden="true" />
-                <span>이력서 PDF 다운로드</span>
+                <span>요약 이력서 보기</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={onDownloadResume}
+                className="inline-flex min-h-[44px] items-center gap-2 rounded-lg px-3 py-3 text-sm font-semibold text-slate-600 transition-colors hover:text-blue-600 whitespace-nowrap shrink-0 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 dark:text-slate-300 dark:hover:text-blue-400"
+              >
+                <FileDown className="h-4 w-4" aria-hidden="true" />
+                <span>PDF 다운로드</span>
               </button>
             </div>
           </div>

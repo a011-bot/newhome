@@ -6,6 +6,13 @@ export interface ProjectSlide {
   caption: string;
 }
 
+export interface ProjectMetricComparison {
+  label: string;
+  before: string;
+  after: string;
+  delta: string;
+}
+
 export interface ProjectItem {
   id: string;
   title: string;
@@ -21,6 +28,7 @@ export interface ProjectItem {
   thumbnail: string;
   thumbnailAlt: string;
   slides: ProjectSlide[];
+  metricsComparison: ProjectMetricComparison[];
   star: {
     situation: string;
     task: string;
@@ -66,11 +74,17 @@ export interface ExperienceItem {
   outcomes: string[];
 }
 
+export interface InterviewQAItem {
+  id: string;
+  question: string;
+  answer: string;
+}
+
 export const CANDIDATE_PROFILE = {
   name: '김서준',
   englishName: 'Seojun Kim',
   roleTitle: '웹 프론트엔드 · UX 엔지니어 (2026년 2월 졸업 예정)',
-  headline: '사용자 이탈의 원인을 가설로 정의하고, 인터페이스로 증명합니다.',
+  headline: '사용자의 망설임을 줄이고, 지표로 증명하는 웹을 만듭니다.',
   introLines:
     '컴퓨터공학과 인터랙션디자인을 복수전공하며 기능 구현과 사용성 개선을 함께 고민해 왔습니다. ' +
     '추측이 아닌 로그와 사용자 테스트를 근거로 문제를 좁히고, ' +
@@ -186,6 +200,27 @@ export const ABOUT_TIMELINE: TimelineItem[] = [
   },
 ];
 
+export const INTERVIEW_QA: InterviewQAItem[] = [
+  {
+    id: 'qa-conflict',
+    question: '디자이너나 백엔드 개발자와 스펙 의견이 충돌할 때 어떻게 조율하나요?',
+    answer:
+      '선호나 직관 대신 "개발 공수 대비 사용자 이탈 감소 효과"와 "예외 케이스 재현 화면"을 기준으로 대화합니다. 실제로 CampusMate 당시 백엔드 검색 응답 지연이 예상되었을 때, 서버 쿼리 변경을 무리하게 요구하는 대신 클라이언트 150ms 디바운스와 학수번호 프리픽스 캐싱을 제안해 일정을 지키면서 체감 속도를 확보했습니다.',
+  },
+  {
+    id: 'qa-priority',
+    question: '일정이 촉박한 프로젝트에서 코드 품질과 구현 속도 중 무엇을 우선하나요?',
+    answer:
+      '사용자 눈에 직접 닿는 핵심 경로(폼 검증, 키보드 닫기, 에러 복구)의 안정성은 타협하지 않고, 부가적인 애니메이션이나 관리자 기능은 후순위로 분리합니다. 재사용 UI(모달·토스트)를 초기에 규격화해 두면 후반부 속도도 함께 빨라진다는 점을 여러 팀 프로젝트로 체감했습니다.',
+  },
+  {
+    id: 'qa-goal',
+    question: '신입으로 입사 후 첫 3개월 동안 팀에 어떻게 기여할 수 있나요?',
+    answer:
+      '기존 디자인 시스템과 코드 컨벤션을 빠르게 익힌 뒤, CS 문의나 QA에서 반복 보고되는 반응형 깨짐·폼 예외 처리·접근성 이슈를 먼저 정리하며 신뢰를 쌓겠습니다. 이후 주요 퍼널의 이벤트 로깅과 UI 개선 실험에 적극 참여해 팀 지표에 기여하고 싶습니다.',
+  },
+];
+
 export const PROJECTS: ProjectItem[] = [
   {
     id: 'proj-01',
@@ -212,6 +247,11 @@ export const PROJECTS: ProjectItem[] = [
         alt: 'CampusMate 디자인 토큰 및 명도 대비 검증 화면',
         caption: '02. 모바일·태블릿 대응을 위해 통일한 컴포넌트 토큰 및 대비 검증표',
       },
+    ],
+    metricsComparison: [
+      { label: '검색 → 거래 요청 전환율', before: '34%', after: '47%', delta: '+38% 개선' },
+      { label: '원하는 교재 탐색 소요 시간', before: '4분 10초', after: '1분 25초', delta: '-66% 단축' },
+      { label: '오탈자·빈 검색 결과 비율', before: '28%', after: '6%', delta: '-22%p 감소' },
     ],
     star: {
       situation:
@@ -260,6 +300,11 @@ export const PROJECTS: ProjectItem[] = [
         caption: '02. 출근·등교 시간대 원터치 조회를 위한 즐겨찾기 정류장 고정 기능',
       },
     ],
+    metricsComparison: [
+      { label: '평균 정류장 대기 예측 오차', before: '6.8분', after: '2.6분', delta: '-4.2분 단축' },
+      { label: '주간 활성 사용자(WAU)', before: '신규 런칭', after: '1,200명', delta: '8주 연속 유지' },
+      { label: '초기 즐겨찾기 조회 탭 수', before: '4탭', after: '1탭', delta: '조회 동선 75% 축소' },
+    ],
     star: {
       situation:
         '오전 8~9시 통학 피크 타임에 학교 셔틀버스 만차로 탑승하지 못하는 학생이 많아, 학생들은 정류장에서 평균 10분 이상 대기하거나 뒤늦게 지하철 환승으로 우회해야 했습니다.',
@@ -301,6 +346,11 @@ export const PROJECTS: ProjectItem[] = [
         alt: 'CareerTrack 지원 기업 목록 및 STAR 에디터 분할 화면',
         caption: '01. 좌측 지원 현황 리스트와 우측 STAR 구조화 에디터를 결합한 2단 작업 공간',
       },
+    ],
+    metricsComparison: [
+      { label: '자소서 문항 초안 작성 시간', before: '120분', after: '65분', delta: '-45% 절감' },
+      { label: '면접 에피소드 검색 시간', before: '3분 이상', after: '5초 이내', delta: '태그 연동 필터' },
+      { label: '임시저장 데이터 유실 건수', before: '월 2~3회', after: '0건', delta: '300ms 자동 백업' },
     ],
     star: {
       situation:
@@ -344,6 +394,11 @@ export const PROJECTS: ProjectItem[] = [
         caption: '01. 태블릿용 UI 가이드라인과 모바일용 실시간 WCAG 2.1 AA 대비율 체커',
       },
     ],
+    metricsComparison: [
+      { label: 'Lighthouse 접근성 평균 점수', before: '74점', after: '99점', delta: '+25점 향상' },
+      { label: '컴포넌트 명도 대비 오류 건수', before: '18건', after: '0건', delta: '4.5:1 100% 충족' },
+      { label: '모달 키보드 포커스 누락률', before: '67%', after: '0%', delta: 'ESC/트랩 표준화' },
+    ],
     star: {
       situation:
         '동아리 내 여러 팀이 프로젝트를 진행할 때마다 버튼·모달·입력 폼의 포커스 링이 제거되거나 회색 텍스트의 명도 대비가 3:1 미만으로 떨어져 접근성 감점과 모바일 터치 오류가 반복되었습니다.',
@@ -362,6 +417,52 @@ export const PROJECTS: ProjectItem[] = [
       github: 'https://github.com/seojunkim-dev/accessa-ui-kit',
       live: 'https://accessa-demo.example.com',
       docLabel: 'WCAG 2.1 체크리스트 및 토큰 명세',
+    },
+  },
+  {
+    id: 'proj-05',
+    title: 'FocusFlow — 팀 스터디 포모도로 & 공유 태스크 보드',
+    subtitle: '비대면 스터디원의 집중 시간 동기화와 작업 상태 공유를 돕는 경량 협업 타이머 웹앱',
+    period: '2024.03 – 2024.06',
+    teamType: '팀 프로젝트',
+    categories: ['팀 프로젝트', '웹 개발'],
+    role: '타이머 상태 동기화 & 칸반 UI 인터랙션 개발',
+    contribution: '기여도 40% (3인 팀: 기획·디자인 1, 프론트 2)',
+    impactMetric: '세션 완주율 +29%',
+    impactValue: '타이머 오차 < 50ms',
+    techStack: ['React', 'TypeScript', 'Web Audio API', 'CSS Grid'],
+    thumbnail: '/src/assets/images/project_studysync_collab_1795768126392.jpg',
+    thumbnailAlt: 'FocusFlow 팀 스터디용 포모도로 타이머와 공유 칸반 태스크 보드가 실행된 노트북 화면',
+    slides: [
+      {
+        image: '/src/assets/images/project_studysync_collab_1795768126392.jpg',
+        alt: 'FocusFlow 포모도로 타이머 및 3단 공유 태스크 보드 화면',
+        caption: '01. 25분 집중 타이머와 팀원별 To-Do / In Progress / Completed 보드 통합 UI',
+      },
+    ],
+    metricsComparison: [
+      { label: '25분 집중 세션 완주율', before: '62%', after: '80%', delta: '+29% 상대 개선' },
+      { label: '백그라운드 탭 시간 오차', before: '최대 14초', after: '50ms 이내', delta: '타임스탬프 보정' },
+      { label: '세션당 태스크 완료 수', before: '1.4개', after: '2.3개', delta: '+64% 증가' },
+    ],
+    star: {
+      situation:
+        '비대면 화상 스터디 진행 시 참여자마다 개인 타이머와 할 일 메모가 따로 돌아 휴식 시간과 집중 시작 시점이 어긋나고 중도 이탈이 잦았습니다.',
+      task:
+        '브라우저 백그라운드 탭에서도 타이머 오차가 발생하지 않으면서, 한 화면에서 타이머와 3단 태스크 보드 상태를 즉시 전환할 수 있는 협업 웹앱을 개발했습니다.',
+      action: [
+        '단순 `setInterval` 카운트다운 대신 시작 시점의 `Date.now()` 종료 예정 타임스탬프를 기준으로 남은 시간을 계산해 브라우저 스로틀링 오차를 제거했습니다.',
+        '할 일 카드의 상태 이동(예정 → 진행 중 → 완료)을 키보드 단축키와 클릭 버튼 양방향으로 지원해 드래그 앤 드롭이 불편한 트랙패드 환경에서도 빠르게 조작할 수 있게 했습니다.',
+      ],
+      result:
+        '교내 알고리즘·면접 스터디 4개 그룹(총 28명) 파일럿 운영 결과 25분 세션 완주율이 62%에서 80%로 상승했으며, 세션 종료 알림 오차 50ms 이내를 유지했습니다.',
+      troubleshooting:
+        '탭 전환 시 브라우저가 백그라운드 타이머 주기를 1초 이상으로 지연시키는 현상이 발견되어, `visibilitychange` 이벤트 시점에 즉시 기준 타임스탬프로 재계산하고 문서 `<title>`에 남은 시간을 동기화해 해결했습니다.',
+    },
+    links: {
+      github: 'https://github.com/seojunkim-dev/focusflow-study',
+      live: 'https://focusflow-demo.example.com',
+      docLabel: '브라우저 타이머 정밀도 개선 노트',
     },
   },
 ];

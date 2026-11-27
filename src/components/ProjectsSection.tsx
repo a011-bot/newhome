@@ -47,6 +47,9 @@ export function ProjectsSection({
     });
   }, [selectedCategory, onlyBookmarked, searchQuery, bookmarkedIds]);
 
+  const isDefaultAllView =
+    selectedCategory === '전체' && !onlyBookmarked && searchQuery.trim().length === 0;
+
   const handleResetFilters = () => {
     setSelectedCategory('전체');
     setOnlyBookmarked(false);
@@ -68,7 +71,7 @@ export function ProjectsSection({
               문제 해결 중심 프로젝트 아카이브
             </h2>
             <p className="mt-3 text-base leading-relaxed text-slate-600 dark:text-slate-300">
-              각 카드를 클릭하면 STAR 프레임워크 기반의 상세 문제 정의, 구현 액션, 트러블슈팅 기록을 확인할 수 있습니다.
+              각 카드를 클릭하면 STAR 프레임워크 기반의 상세 문제 정의, 구현 액션, 정량 성과 비교 및 트러블슈팅을 확인할 수 있습니다.
             </p>
           </div>
 
@@ -152,7 +155,7 @@ export function ProjectsSection({
           </div>
         </div>
 
-        {/* Project Grid or Empty State */}
+        {/* Project Bento Grid or Empty State */}
         {filteredProjects.length === 0 ? (
           <div className="mt-10 flex flex-col items-center justify-center rounded-xl border border-dashed border-slate-300 bg-slate-50 px-6 py-16 text-center dark:border-slate-700 dark:bg-slate-900/50">
             <FolderOpen className="h-10 w-10 text-slate-400" aria-hidden="true" />
@@ -172,9 +175,118 @@ export function ProjectsSection({
           </div>
         ) : (
           <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {filteredProjects.map((project) => {
+            {filteredProjects.map((project, index) => {
               const isBookmarked = bookmarkedIds.includes(project.id);
               const isImgBroken = brokenImageIds[project.id];
+              const isFeatured = isDefaultAllView && index === 0;
+
+              if (isFeatured) {
+                return (
+                  <article
+                    key={project.id}
+                    className="group grid overflow-hidden rounded-xl border border-slate-200 bg-white transition-colors hover:border-slate-300 sm:col-span-2 lg:grid-cols-12 dark:border-slate-800 dark:bg-slate-900 dark:hover:border-slate-700"
+                  >
+                    <div className="relative aspect-video overflow-hidden border-b border-slate-200 bg-slate-100 lg:col-span-6 lg:aspect-auto lg:h-full lg:border-r lg:border-b-0 dark:border-slate-800 dark:bg-slate-800">
+                      {!isImgBroken ? (
+                        <img
+                          src={project.thumbnail}
+                          alt={project.thumbnailAlt}
+                          referrerPolicy="no-referrer"
+                          onError={() =>
+                            setBrokenImageIds((prev) => ({ ...prev, [project.id]: true }))
+                          }
+                          className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.02]"
+                        />
+                      ) : (
+                        <div className="flex h-full w-full flex-col items-center justify-center bg-gradient-to-br from-slate-100 to-slate-200 p-4 text-center dark:from-slate-800 dark:to-slate-900">
+                          <span className="text-xs font-semibold text-slate-600 dark:text-slate-300">
+                            {project.title}
+                          </span>
+                        </div>
+                      )}
+
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          onToggleBookmark(project.id);
+                        }}
+                        aria-pressed={isBookmarked}
+                        aria-label={`${project.title} 북마크 ${isBookmarked ? '해제' : '추가'}`}
+                        className={`absolute top-3 right-3 inline-flex h-10 w-10 items-center justify-center rounded-lg border transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 ${
+                          isBookmarked
+                            ? 'border-blue-600 bg-blue-600 text-white'
+                            : 'border-slate-200/90 bg-white/95 text-slate-700 hover:text-blue-600 dark:border-slate-700 dark:bg-slate-900/95 dark:text-slate-200'
+                        }`}
+                      >
+                        <Bookmark
+                          className={`h-4 w-4 ${isBookmarked ? 'fill-current' : ''}`}
+                          aria-hidden="true"
+                        />
+                      </button>
+                    </div>
+
+                    <div className="flex flex-col justify-between p-6 lg:col-span-6 lg:p-7">
+                      <div>
+                        <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-slate-500 dark:text-slate-400">
+                          <span className="font-semibold text-blue-600 dark:text-blue-400">
+                            대표 프로젝트
+                          </span>
+                          <span aria-hidden="true">·</span>
+                          <span className="font-medium text-slate-700 dark:text-slate-300">
+                            {project.teamType}
+                          </span>
+                          <span aria-hidden="true">·</span>
+                          <span className="font-mono-tabular">{project.period}</span>
+                        </div>
+
+                        <h3 className="mt-2.5 text-xl font-bold leading-snug text-slate-900 dark:text-white">
+                          <button
+                            type="button"
+                            onClick={(e) => onSelectProject(project, e.currentTarget)}
+                            className="text-left transition-colors hover:text-blue-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 dark:hover:text-blue-400"
+                          >
+                            {project.title}
+                          </button>
+                        </h3>
+
+                        <p className="mt-2.5 text-sm leading-relaxed text-slate-600 dark:text-slate-300">
+                          {project.subtitle}
+                        </p>
+
+                        <p className="mt-3 text-xs font-medium text-slate-500 dark:text-slate-400">
+                          {project.contribution}
+                        </p>
+
+                        <p className="mt-4 border-t border-slate-100 pt-4 text-xs leading-relaxed text-slate-600 dark:border-slate-800 dark:text-slate-300">
+                          {project.star.result}
+                        </p>
+                      </div>
+
+                      <div className="mt-5 border-t border-slate-100 pt-4 dark:border-slate-800">
+                        <p className="text-xs text-slate-500 dark:text-slate-400">
+                          {project.techStack.join(' · ')}
+                        </p>
+
+                        <div className="mt-3 flex items-center justify-between gap-3">
+                          <span className="font-mono-tabular text-xs font-semibold text-blue-600 dark:text-blue-400">
+                            {project.impactMetric}
+                          </span>
+
+                          <button
+                            type="button"
+                            onClick={(e) => onSelectProject(project, e.currentTarget)}
+                            className="inline-flex min-h-[36px] items-center gap-1 text-xs font-semibold text-slate-800 transition-colors hover:text-blue-600 whitespace-nowrap shrink-0 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 dark:text-slate-200 dark:hover:text-blue-400"
+                          >
+                            <span>STAR 상세 보기</span>
+                            <ArrowUpRight className="h-3.5 w-3.5" aria-hidden="true" />
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </article>
+                );
+              }
 
               return (
                 <article

@@ -7,6 +7,7 @@ import { Header, NavSectionId } from './components/Header';
 import { HeroSection } from './components/HeroSection';
 import { ProjectModal } from './components/ProjectModal';
 import { ProjectsSection } from './components/ProjectsSection';
+import { ResumeModal } from './components/ResumeModal';
 import { SkillsSection } from './components/SkillsSection';
 import { CANDIDATE_PROFILE, ProjectItem, PROJECTS } from './data/portfolioData';
 
@@ -43,6 +44,7 @@ export default function App() {
   });
 
   const [selectedProject, setSelectedProject] = useState<ProjectItem | null>(null);
+  const [resumePreviewOpen, setResumePreviewOpen] = useState(false);
   const [toast, setToast] = useState<ToastState | null>(null);
   const modalTriggerRef = useRef<HTMLElement | null>(null);
   const toastTimerRef = useRef<number | null>(null);
@@ -255,6 +257,7 @@ export default function App() {
           onToggleTheme={handleToggleTheme}
           onExploreProjects={() => handleNavigate('projects')}
           onDownloadResume={handleDownloadResume}
+          onOpenResumePreview={() => setResumePreviewOpen(true)}
         />
 
         <AboutSection />
@@ -281,6 +284,12 @@ export default function App() {
         onCopyDeepLink={handleCopyDeepLink}
         onSelectProject={handleSwitchProjectInModal}
         onClose={handleCloseModal}
+      />
+
+      <ResumeModal
+        open={resumePreviewOpen}
+        onClose={() => setResumePreviewOpen(false)}
+        onDownloadPdf={handleDownloadResume}
       />
 
       {/* Global Toast Notification */}
