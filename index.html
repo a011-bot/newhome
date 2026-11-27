@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="ko" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>김서준 포트폴리오 | 직무 중심 문제 해결 역량 아카이브</title>
+    <meta
+      name="description"
+      content="문제 정의부터 해결 액션, 정량적 성과까지 직무 역량을 체계적으로 정리한 신입 웹 프론트엔드·UX 엔지니어 취업 포트폴리오 사이트입니다."
+    />
+    <meta property="og:title" content="김서준 포트폴리오 | 직무 중심 문제 해결 역량 아카이브" />
+    <meta
+      property="og:description"
+      content="문제 정의부터 해결 액션, 정량적 성과까지 직무 역량을 체계적으로 정리한 신입 웹 프론트엔드·UX 엔지니어 취업 포트폴리오 사이트입니다."
+    />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <script>
+      (function () {
+        try {
+          var saved = localStorage.getItem('portfolioTheme');
+          if (saved === 'dark') {
+            document.documentElement.classList.add('dark');
+          }
+        } catch (e) {}
+      })();
+    </script>
+  </head>
+  <body class="bg-white text-slate-800 antialiased dark:bg-slate-950 dark:text-slate-100">
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

@@ -1,0 +1,6 @@
+{
+  "name": "김서준 포트폴리오 | 직무 중심 문제 해결 역량 아카이브",
+  "description": "문제 정의부터 실행, 정량적 성과까지 직무 역량을 아카이브한 웹 프론트엔드·UX 엔지니어 개인 취업 포트폴리오 사이트입니다.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
